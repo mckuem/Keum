@@ -331,8 +331,19 @@ with tabs[4]:
         tooltip=["주차:T", "카테고리", "매출지수"]
     ).properties(height=380)
     st.altair_chart(line, use_container_width=True)
-    summary_sales = sales_chart_df.groupby("카테고리", as_index=False)["매출지수"].agg(["mean", "max"]).reset_index()
-    summary_sales.columns = ["카테고리", "평균 매출지수", "최고 매출지수"]
+    summary_sales = (
+    sales_chart_df.groupby("카테고리", as_index=False)
+    .agg(
+        평균_매출지수=("매출지수", "mean"),
+        최고_매출지수=("매출지수", "max"),
+    )
+    .rename(
+        columns={
+            "평균_매출지수": "평균 매출지수",
+            "최고_매출지수": "최고 매출지수",
+        }
+    )
+)
     col1, col2 = st.columns([1, 1])
     with col1:
         section_header("카테고리 평균/최고 매출")
